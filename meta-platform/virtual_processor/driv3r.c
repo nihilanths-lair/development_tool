@@ -4,16 +4,16 @@ void driv3r()
     {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0
     };
+    unsigned char program_counter = 0;
     void * opcodes[ 0x100 ] =
     {
         [0         ] = &&__1,
         [1         ] = &&__2,
         [2 ... 0xFF] = &&__3
     };
-    unsigned char head_sector = 0;
     //unsigned char number_of_clock_cycles = 0; // Количество тактов
     //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * memory, "-", "-");
-    goto ** (opcodes + * memory);
+    goto ** (opcodes + * (memory + program_counter));
     __1:
     {
         //number_of_clock_cycles++;
@@ -24,8 +24,8 @@ void driv3r()
     {
         //number_of_clock_cycles++;
         printf("\n logical_opcode_%u | %s ; %s", 2, "NOP / SKIP / IGNORE / STEP_FORWARD", "Пропустить / Игнорировать / Сделать шаг вперёд");
-        head_sector++;
-        goto ** (opcodes + * (memory + head_sector));
+        program_counter++;
+        goto ** (opcodes + * (memory + program_counter));
     }
     __3:
     {
