@@ -1,6 +1,6 @@
 void driv3r()
 {
-    unsigned char memory[] =
+    unsigned char memory[0x100];/* =
     {
         0x01, // 1
         0x01, // 2
@@ -18,7 +18,17 @@ void driv3r()
         0x01, // 14
 
         0x00  // 15
-    };
+    };*/
+    FILE * fp = fopen("meta_language", "r");
+    if (fp) { printf(" /!\\: Не удалось открыть файл на считывание ..."); return; }
+    printf(" /!\\: Файл открыт на считывание ...");
+    putchar('\n');
+    for (unsigned char i = 0; i < 15; i++) printf("\n memory[%+2u] = %02X", i+1, memory[i]);
+    putchar('\n');
+    for (unsigned char i = 0; i < 15; i++) fscanf(fp, "%u", memory[i]);
+    for (unsigned char i = 0; i < 15; i++) printf("\n memory[%+2u] = %02X", i+1, memory[i]);
+    putchar('\n');
+    fclose(fp);
     unsigned char program_counter = 0;
     void * opcodes[ 0x100 ] =
     {
