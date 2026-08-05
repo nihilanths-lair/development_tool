@@ -1,34 +1,20 @@
+#include <stdio.h>
+
 void driv3r()
 {
-    unsigned char memory[0x100];/* =
+    unsigned char memory[0x100] = {0};
+    FILE * fp = fopen("virtual_processor/meta_language", "r");
+    if (!fp)
     {
-        0x01, // 1
-        0x01, // 2
-        0x01, // 3
-        0x01, // 4
-        0x01, // 5
-        0x01, // 6
-        0x01, // 7
-        0x01, // 8
-        0x01, // 9
-        0x01, // 10
-        0x01, // 11
-        0x01, // 12
-        0x01, // 13
-        0x01, // 14
-
-        0x00  // 15
-    };*/
-    FILE * fp = fopen("meta_language", "r");
-    if (fp) { printf(" /!\\: Не удалось открыть файл на считывание ..."); return; }
-    printf(" /!\\: Файл открыт на считывание ...");
+        printf("\n /!\\: Не удалось открыть файл ...");
+        return;
+    }
+    for (unsigned char i = 0; i < 15; i++) printf("\n [%+2u] = %02X", i+1, memory[i]);
     putchar('\n');
-    for (unsigned char i = 0; i < 15; i++) printf("\n memory[%+2u] = %02X", i+1, memory[i]);
-    putchar('\n');
-    for (unsigned char i = 0; i < 15; i++) fscanf(fp, "%u", memory[i]);
-    for (unsigned char i = 0; i < 15; i++) printf("\n memory[%+2u] = %02X", i+1, memory[i]);
-    putchar('\n');
+    for (unsigned char i = 0; i < 15; i++) fscanf(fp, "%hhx", &memory[i]);
     fclose(fp);
+    for (unsigned char i = 0; i < 15; i++) printf("\n [%+2u] = %02X", i+1, memory[i]);
+    putchar('\n');
     unsigned char program_counter = 0;
     void * opcodes[ 0x100 ] =
     {
