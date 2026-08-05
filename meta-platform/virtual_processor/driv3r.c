@@ -9,11 +9,15 @@ void driv3r()
         printf("\n /!\\: Не удалось открыть файл ...");
         return;
     }
-    for (unsigned char i = 0; i < 15; i++) printf("\n [%+2u] = %02X", i+1, memory[i]);
+    fseek(fp, 0, SEEK_END);
+    long file_size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    for (unsigned short i = 0; i < file_size; i++) printf("\n [%+2u] = %02X", i+1, memory[i]);
     putchar('\n');
-    for (unsigned char i = 0; i < 15; i++) fscanf(fp, "%hhx", &memory[i]);
+    unsigned char ascii = 0;
+    for (unsigned char i = 0; fscanf(fp, "%hhx", &memory[i]) != EOF; i++, ascii++) {}
     fclose(fp);
-    for (unsigned char i = 0; i < 15; i++) printf("\n [%+2u] = %02X", i+1, memory[i]);
+    for (unsigned short i = 0; i < ascii; i++) printf("\n [%+2u] = %02X", i+1, memory[i]);
     putchar('\n');
     unsigned char program_counter = 0;
     void * opcodes[ 0x100 ] =
