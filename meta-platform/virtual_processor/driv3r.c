@@ -1,14 +1,17 @@
 void driv3r()
 {
-    char opcodes[] =
+    char memory[] =
     {
         0
     };
-    void * dispatch[0x100] =
+    void * opcodes[ 0x100 ] =
     {
-        [0 ... 0xFF] = &&__0
+        [0 ... 0xFF] = &&__1
     };
-    goto * dispatch[ opcodes[0] ];
-    __0:
-     { return; }
+    goto * opcodes[* memory];
+    __1:
+    {
+        printf(" logical_opcode_%u | %s ; %s", 1, "HLT", "Прекратить выполнение каких-либо инструкций");
+        return;
+    }
 }
