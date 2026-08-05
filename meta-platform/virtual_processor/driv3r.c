@@ -2,24 +2,36 @@ void driv3r()
 {
     unsigned char memory[] =
     {
-        0
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0
     };
     void * opcodes[ 0x100 ] =
     {
         [0         ] = &&__1,
-        [1 ... 0xFF] = &&__2
+        [1         ] = &&__2,
+        [2 ... 0xFF] = &&__3
     };
-    printf(" [<<{ TRACING }>>] logical_opcode_%u | %s ; %s", * memory, "-", "-");
-    goto * (opcodes + * memory);
+    unsigned char head_sector = 0;
+    //unsigned char number_of_clock_cycles = 0; // РљРѕР»РёС‡РµСЃС‚РІРѕ С‚Р°РєС‚РѕРІ
+    //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * memory, "-", "-");
+    goto ** (opcodes + * memory);
     __1:
     {
-        printf(" logical_opcode_%u | %s ; %s", 1, "HLT", "Прекратить выполнение каких-либо инструкций");
+        //number_of_clock_cycles++;
+        printf("\n logical_opcode_%u | %s ; %s", 1, "HLT / STOP", "РџСЂРµРєСЂР°С‚РёС‚СЊ РІС‹РїРѕР»РЅРµРЅРёРµ РєР°РєРёС…-Р»РёР±Рѕ РёРЅСЃС‚СЂСѓРєС†РёР№");
         return;
     }
     __2:
     {
-        printf(" logical_opcode_%u | %s ; %s", 2, "-", "(Неизвестный / Несуществующий) опкод");
+        //number_of_clock_cycles++;
+        printf("\n logical_opcode_%u | %s ; %s", 2, "NOP / SKIP / IGNORE / STEP_FORWARD", "РџСЂРѕРїСѓСЃС‚РёС‚СЊ / РРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ / РЎРґРµР»Р°С‚СЊ С€Р°Рі РІРїРµСЂС‘Рґ");
+        head_sector++;
+        goto ** (opcodes + * (memory + head_sector));
+    }
+    __3:
+    {
+        //number_of_clock_cycles++;
+        printf("\n logical_opcode_%u | %s ; %s", 3, "-", "(РќРµРёР·РІРµСЃС‚РЅС‹Р№ / РќРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№) РѕРїРєРѕРґ");
         return;
     }
-    //printf(" logical_opcode_%u | %s ; %s", * memory, "-", "-");
+    //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * memory, "-", "-");
 }

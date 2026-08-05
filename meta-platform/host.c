@@ -7,5 +7,6 @@ int main()
 {
     parser();
     driv3r();
+    putchar('\n');
     return 0;
 }
