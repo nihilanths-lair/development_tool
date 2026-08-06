@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "virtual_processor/driv3r.c"
 #include "compiler/frontend/parser.c"
 
