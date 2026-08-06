@@ -6,7 +6,7 @@ void driv3r()
     // Гибридная модель памяти
     uint8_t m8[0x100] = {0}; // для хранения строк
     uint64_t m64[0x100] = {0}; // для хранения чисел
-    uint8_t pc = 0;
+    uint64_t pc = 0;
 
     FILE * fp = fopen("virtual_processor/meta_language", "r");
     if (!fp)
@@ -41,7 +41,7 @@ void driv3r()
     __2:
     {
         printf("\n logical_opcode_%u | %s ; %s", 2, "MOV MEM64 <- IMM64", "Перемещение");
-        m64[pc+1] = m64[pc+2];
+        m64[pc+1] = pc+2;
         pc += 3;
         goto *opcodes[m8[pc]];
     }
