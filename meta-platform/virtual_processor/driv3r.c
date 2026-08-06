@@ -19,15 +19,13 @@ void driv3r()
     long file_size = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
-    for (unsigned short i = 0; i < file_size; i++) printf("\n [%+2u] = %02X", i+1, m8[i]);
-    putchar('\n');
     unsigned char ascii = 0;
     for (unsigned char i = 0; fscanf(fp, "%hhx", &m8[i]) != EOF; i++, ascii++) {}
     fclose(fp);
     for (unsigned short i = 0; i < ascii; i++) printf("\n [%+2u] = %02X", i+1, m8[i]);
     putchar('\n');
     unsigned char program_counter = 0;
-    void * opcodes[ 0x100 ] =
+    void *opcodes[0x100] =
     {
         [0         ] = &&__1,
         [1         ] = &&__2,
@@ -35,7 +33,7 @@ void driv3r()
     };
     //unsigned char number_of_clock_cycles = 0; // Количество тактов
     //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * m8, "-", "-");
-    goto ** (opcodes + * (m8 + program_counter));
+    goto *opcodes[m8[program_counter]];
     __1:
     {
         //number_of_clock_cycles++;
@@ -47,7 +45,7 @@ void driv3r()
         //number_of_clock_cycles++;
         printf("\n logical_opcode_%u | %s ; %s", 2, "NOP / SKIP / IGNORE / STEP_FORWARD", "Пропустить / Игнорировать / Сделать шаг вперёд");
         program_counter++;
-        goto ** (opcodes + * (m8 + program_counter));
+        goto *opcodes[m8[program_counter]];
     }
     __3:
     {
