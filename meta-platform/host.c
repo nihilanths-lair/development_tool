@@ -1,4 +1,4 @@
-#include "virtual_processor/driv3r.c"
+#include "computing_module/driv3r.c"
 #include "compiler/frontend/parser.c"
 
 int main()
