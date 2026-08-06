@@ -24,11 +24,21 @@ void driv3r()
     fclose(fp);
     for (unsigned short i = 0; i < ascii; i++) printf("\n [%+2u] = %02X", i+1, m8[i]);
     putchar('\n');
+
+    // Таблица опкодов мета-языка
     void *opcodes[0x100] =
     {
-        [0         ] = &&__1,
-        [1         ] = &&__2,
-        [2 ... 0xFF] = &&__3
+        [0] = &&__1,
+        [1] = &&__2,
+        [2] = &&__3,
+        [3 ... 0xFF] = &&__4
+    };
+    // Векторная таблица системных служб хоста
+    void *ivt[0x100] =
+    {
+        [0] = &&__1, // Открыть файл
+        [1] = &&__2, // Считать ascii-символ (байт)
+        [2] = &&__3  // Закрыть файл
     };
     //unsigned char number_of_clock_cycles = 0; // Количество тактов
     //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * m8, "-", "-");
@@ -40,12 +50,38 @@ void driv3r()
     }
     __2:
     {
+        goto *ivt[m64[0]];
+        ivt_1:
+        {
+            char *filename = (char *) &m8[m64[1]];
+            char *mode = (char *) &m8[m64[2]];
+            m64[4] = (uint64_t) fopen(filename, mode);
+            pc += 1;
+            goto *opcodes[m8[pc]];
+        }
+        ivt_2:
+        {
+            FILE *fp = (FILE *) m64[1];
+            m64[4] = fp ? (uint64_t) fgetc(fp) : (uint64_t) - 1;
+            pc += 1;
+            goto *opcodes[m8[pc]];
+        }
+        ivt_3:
+        {
+            FILE *fp = (FILE *) m64[1];
+            if (fp) fclose(fp);
+            pc += 1;
+            goto *opcodes[m8[pc]];
+        }
+    }
+    __3:
+    {
         printf("\n logical_opcode_%u | %s ; %s", 2, "MOV MEM64 <- IMM64", "Перемещение");
         m64[pc+1] = pc+2;
         pc += 3;
         goto *opcodes[m8[pc]];
     }
-    __3:
+    __4:
     {
         printf("\n logical_opcode_%u | %s ; %s", 3, "-", "(Неизвестный / Несуществующий) опкод");
         return;
