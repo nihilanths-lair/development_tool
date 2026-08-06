@@ -3,10 +3,10 @@
 
 void driv3r()
 {
-    // гибридная модель памяти
+    // Гибридная модель памяти
     uint8_t m8[0x100] = {0}; // для хранения строк
     uint64_t m64[0x100] = {0}; // для хранения чисел
-    //uint64_t pc;
+    uint8_t pc = 0;
 
     FILE * fp = fopen("virtual_processor/meta_language", "r");
     if (!fp)
@@ -24,7 +24,6 @@ void driv3r()
     fclose(fp);
     for (unsigned short i = 0; i < ascii; i++) printf("\n [%+2u] = %02X", i+1, m8[i]);
     putchar('\n');
-    unsigned char program_counter = 0;
     void *opcodes[0x100] =
     {
         [0         ] = &&__1,
@@ -33,25 +32,27 @@ void driv3r()
     };
     //unsigned char number_of_clock_cycles = 0; // Количество тактов
     //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * m8, "-", "-");
-    goto *opcodes[m8[program_counter]];
+    goto *opcodes[m8[pc]];
     __1:
     {
-        //number_of_clock_cycles++;
         printf("\n logical_opcode_%u | %s ; %s", 1, "HLT / STOP", "Прекратить выполнение каких-либо инструкций");
         return;
     }
     __2:
     {
-        //number_of_clock_cycles++;
-        printf("\n logical_opcode_%u | %s ; %s", 2, "NOP / SKIP / IGNORE / STEP_FORWARD", "Пропустить / Игнорировать / Сделать шаг вперёд");
-        program_counter++;
-        goto *opcodes[m8[program_counter]];
+        printf("\n logical_opcode_%u | %s ; %s", 2, "MOV MEM64 <- IMM64", "Перемещение");
+        m64[pc+1] = m64[pc+2];
+        pc += 3;
+        goto *opcodes[m8[pc]];
     }
     __3:
     {
-        //number_of_clock_cycles++;
         printf("\n logical_opcode_%u | %s ; %s", 3, "-", "(Неизвестный / Несуществующий) опкод");
         return;
     }
     //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * memory, "-", "-");
 }
+/*
+//number_of_clock_cycles++;
+//printf("\n logical_opcode_%u | %s ; %s", 2, "NOP / SKIP / IGNORE / STEP_FORWARD", "Пропустить / Игнорировать / Сделать шаг вперёд");
+*/
