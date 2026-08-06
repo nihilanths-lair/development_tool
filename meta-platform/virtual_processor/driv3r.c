@@ -8,22 +8,19 @@ void driv3r()
     uint64_t m64[0x100] = {0}; // для хранения чисел
     uint64_t pc = 0;
 
-    FILE * fp = fopen("virtual_processor/meta_language", "r");
-    if (!fp)
-    {
-        printf("\n /!\\: Не удалось открыть файл ...");
-        return;
-    }
+    // --- НАЧАЛО СТАРТОВОГО ИМПУЛЬСА ---
+    m8[0] = 1; // SYS / INT
 
-    fseek(fp, 0, SEEK_END);
-    long file_size = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
+    // 1. Копируем строку прямо внутрь массива m8, начиная с 10-й ячейки
+    ///sprintf((char *) &m8[10], "virtual_processor/meta_language");
 
-    unsigned char ascii = 0;
-    for (unsigned char i = 0; fscanf(fp, "%hhx", &m8[i]) != EOF; i++, ascii++) {}
-    fclose(fp);
-    for (unsigned short i = 0; i < ascii; i++) printf("\n [%+2u] = %02X", i+1, m8[i]);
-    putchar('\n');
+    // 2. Передаем параметры в m64 для службы sys_open
+    m64[0] = 1;   // ID службы: sys_open
+    ///m64[1] = 10;  // Аргумент 1: Адрес начала строки с именем файла внутри m8
+
+    // Явным кастом (приведением типов) превращаем Си-указатель в число 64-бит
+    m64[1] = (uint64_t) "virtual_processor/meta_language";
+    // --- КОНЕЦ СТАРТОВОГО ИМПУЛЬСА ---
 
     // Таблица опкодов мета-языка
     void *opcodes[0x100] =
@@ -45,17 +42,19 @@ void driv3r()
     goto *opcodes[m8[pc]];
     __1:
     {
-        printf("\n logical_opcode_%u | %s ; %s", 1, "HLT / STOP", "Прекратить выполнение каких-либо инструкций");
+        printf("\n logical_opcode_1 | HLT / STOP ; Прекратить выполнение каких-либо инструкций");
         return;
     }
     __2:
     {
+        printf("\n logical_opcode_2 | SYS / INT ; Системный вызов хоста");
         goto *ivt[m64[0]];
         ivt_1:
         {
-            char *filename = (char *) &m8[m64[1]];
-            char *mode = (char *) &m8[m64[2]];
-            m64[4] = (uint64_t) fopen(filename, mode);
+            //char *filename = (char *) &m8[m64[1]];     // Достаем число 10 из m64[1] и получаем прямой указатель на текст внутри m8
+            char *filename = (char *) m64[1];          // Кастуем число обратно в указатель на строку
+            char *mode = (char *) &m8[m64[2]];         // Открываем файл (режим "r" пока можно зашить прямо здесь для простоты)
+            m64[4] = (uint64_t) fopen(filename, mode); //
             pc += 1;
             goto *opcodes[m8[pc]];
         }
@@ -76,14 +75,14 @@ void driv3r()
     }
     __3:
     {
-        printf("\n logical_opcode_%u | %s ; %s", 2, "MOV MEM64 <- IMM64", "Перемещение");
+        printf("\n logical_opcode_3 | MOV MEM64 <- IMM64 ; Перемещение");
         m64[pc+1] = pc+2;
         pc += 3;
         goto *opcodes[m8[pc]];
     }
     __4:
     {
-        printf("\n logical_opcode_%u | %s ; %s", 3, "-", "(Неизвестный / Несуществующий) опкод");
+        printf("\n logical_opcode_4 | - ; (Неизвестный / Несуществующий) опкод");
         return;
     }
     //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * memory, "-", "-");
