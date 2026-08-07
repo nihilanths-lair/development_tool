@@ -1,8 +1,11 @@
-#include "computing_module/driv3r.c"
+#include <locale.h>
+
+#include "actuator/driv3r.c"
 #include "compiler/frontend/parser.c"
 
 int main()
 {
+    setlocale(0, "");
     parser();
     driv3r();
     putchar('\n');
