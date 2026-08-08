@@ -11,14 +11,14 @@ int main(int argc, char *argv[])
     setlocale(0, "");
     //SetConsoleCP(1251);       // Кодировка ввода
     //SetConsoleOutputCP(1251); // Кодировка вывода
+    //printf("\n argc = %u", argc);
+    //for (int i = 0; i < argc; i++) printf("\n argv[%u] = %s", i, argv[i]);
+    //putchar('\n');
     printf(  "  __________________________");
     printf("\n |                          |");
     printf("\n |  Мета-платформа запущена |");
     printf("\n |__________________________|");
     putchar('\n');
-    //printf("\n argc = %u", argc);
-    //for (int i = 0; i < argc; i++) printf("\n argv[%u] = %s", i, argv[i]);
-    //putchar('\n');
     //parser();
     //printf("\n 1. Загрузка пакета actuator/driv3r.c");
     __loop:
