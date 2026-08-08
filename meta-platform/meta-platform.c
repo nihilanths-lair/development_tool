@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
     printf("\n |  Мета-платформа запущена |");
     printf("\n |__________________________|");
     putchar('\n');
-    printf("\n argc = %u", argc);
-    for (int i = 0; i < argc; i++) printf("\n argv[%u] = %s", i, argv[i]);
-    putchar('\n');
-    parser();
+    //printf("\n argc = %u", argc);
+    //for (int i = 0; i < argc; i++) printf("\n argv[%u] = %s", i, argv[i]);
+    //putchar('\n');
+    //parser();
     //printf("\n 1. Загрузка пакета actuator/driv3r.c");
     __loop:
     printf("\n 1. Мета-платформа передала управление подпрограмме driv3r из каталога actuator");
