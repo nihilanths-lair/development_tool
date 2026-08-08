@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define macro__display_debug_information \
+ printf("\n logical opcode: %02X", m8[pc]); \
  printf("\n          _________________________"); \
  printf("\n ________/ Служебные ячейки памяти \\________"); \
  putchar('\n'); \
@@ -82,13 +83,11 @@ char driv3r()
     __1:
     {
         macro__display_debug_information;
-        printf("\n logical opcode: 1 | HLT / STOP ; Прекратить выполнение каких-либо инструкций");
         return 0;
     }
     __2:
     {
         macro__display_debug_information;
-        printf("\n logical opcode: 2 | SYS / INT ; Системный вызов хоста");
         goto *ivt[m64[0]];
         ivt_1:
         {
@@ -127,7 +126,6 @@ char driv3r()
     __3: // mem64[0] = imm64 ; поместить число в конкретно фиксированную (служебную) ячейку памяти
     {
         macro__display_debug_information;
-        printf("\n logical opcode: 3");
         m64[0] = // само число (порядок байт: big-endian, от младшего к старшему)
          ((uint64_t) m8[pc+1]) |
          ((uint64_t) m8[pc+2]<<8) |
@@ -160,7 +158,6 @@ char driv3r()
     __4:
     {
         macro__display_debug_information;
-        printf("\n logical_opcode_4 | - ; (Неизвестный / Несуществующий) опкод");
         return 0;
     }
     //printf(" {{ TRACING }} logical_opcode_%u | %s ; %s", * memory, "-", "-");
