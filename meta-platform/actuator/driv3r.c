@@ -4,66 +4,29 @@
 #include <stdint.h>
 
 #define macro__display_debug_information \
- printf("\n logical opcode: %02X", m8[pc]); \
- printf("\n          _________________________"); \
- printf("\n ________/ Служебные ячейки памяти \\________"); \
- putchar('\n'); \
- printf("\n m64[0] = %20llu | %02X %02X %02X %02X %02X %02X %02X %02X", \
-  (uint64_t) m64[0],            \
-  (uint8_t)((m64[0]>>56)&0xFF), \
-  (uint8_t)((m64[0]>>48)&0xFF), \
-  (uint8_t)((m64[0]>>40)&0xFF), \
-  (uint8_t)((m64[0]>>32)&0xFF), \
-  (uint8_t)((m64[0]>>24)&0xFF), \
-  (uint8_t)((m64[0]>>16)&0xFF), \
-  (uint8_t)((m64[0]>> 8)&0xFF), \
-  (uint8_t)( m64[0]     &0xFF)  \
- );                             \
- printf("\n m64[1] = %20llu | %02X %02X %02X %02X %02X %02X %02X %02X", \
-  (uint64_t) m64[1],            \
-  (uint8_t)((m64[1]>>56)&0xFF), \
-  (uint8_t)((m64[1]>>48)&0xFF), \
-  (uint8_t)((m64[1]>>40)&0xFF), \
-  (uint8_t)((m64[1]>>32)&0xFF), \
-  (uint8_t)((m64[1]>>24)&0xFF), \
-  (uint8_t)((m64[1]>>16)&0xFF), \
-  (uint8_t)((m64[1]>> 8)&0xFF), \
-  (uint8_t)( m64[1]     &0xFF)  \
- );                             \
- printf("\n m64[2] = %20llu | %02X %02X %02X %02X %02X %02X %02X %02X", \
-  (uint64_t) m64[2],            \
-  (uint8_t)((m64[2]>>56)&0xFF), \
-  (uint8_t)((m64[2]>>48)&0xFF), \
-  (uint8_t)((m64[2]>>40)&0xFF), \
-  (uint8_t)((m64[2]>>32)&0xFF), \
-  (uint8_t)((m64[2]>>24)&0xFF), \
-  (uint8_t)((m64[2]>>16)&0xFF), \
-  (uint8_t)((m64[2]>> 8)&0xFF), \
-  (uint8_t)( m64[2]     &0xFF)  \
- );                             \
- printf("\n m64[3] = %20llu | %02X %02X %02X %02X %02X %02X %02X %02X", \
-  (uint64_t) m64[3],            \
-  (uint8_t)((m64[3]>>56)&0xFF), \
-  (uint8_t)((m64[3]>>48)&0xFF), \
-  (uint8_t)((m64[3]>>40)&0xFF), \
-  (uint8_t)((m64[3]>>32)&0xFF), \
-  (uint8_t)((m64[3]>>24)&0xFF), \
-  (uint8_t)((m64[3]>>16)&0xFF), \
-  (uint8_t)((m64[3]>> 8)&0xFF), \
-  (uint8_t)( m64[3]     &0xFF)  \
- );                             \
- printf("\n m64[4] = %20llu | %02X %02X %02X %02X %02X %02X %02X %02X", \
-  (uint64_t) m64[4],            \
-  (uint8_t)((m64[4]>>56)&0xFF), \
-  (uint8_t)((m64[4]>>48)&0xFF), \
-  (uint8_t)((m64[4]>>40)&0xFF), \
-  (uint8_t)((m64[4]>>32)&0xFF), \
-  (uint8_t)((m64[4]>>24)&0xFF), \
-  (uint8_t)((m64[4]>>16)&0xFF), \
-  (uint8_t)((m64[4]>> 8)&0xFF), \
-  (uint8_t)( m64[4]     &0xFF)  \
- );                             \
- printf("\n ___________________________________________");
+do\
+{\
+    printf("\n logical opcode: %02X", m8[pc]);\
+    printf("\n          _________________________");\
+    printf("\n ________/ Служебные ячейки памяти \\________");\
+    putchar('\n');\
+    for (int i = 0; i < 5; i++)\
+    {\
+        printf(" m64[%d] = %20llu | %02X %02X %02X %02X %02X %02X %02X %02X\n",\
+         i, (uint64_t) m64[i],\
+         (uint8_t)(m64[i]>>56),\
+         (uint8_t)(m64[i]>>48),\
+         (uint8_t)(m64[i]>>40),\
+         (uint8_t)(m64[i]>>32),\
+         (uint8_t)(m64[i]>>24),\
+         (uint8_t)(m64[i]>>16),\
+         (uint8_t)(m64[i]>>8),\
+         (uint8_t)(m64[i])\
+        );\
+    }\
+    printf("\n ___________________________________________");\
+}\
+while(0)
 
 char driv3r()
 {
